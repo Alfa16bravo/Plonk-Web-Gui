@@ -1,0 +1,1046 @@
+/* PLONK Professional - Styles CSS */
+
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #3498db;
+  --success-color: #27ae60;
+  --warning-color: #f39c12;
+  --danger-color: #e74c3c;
+  --dark-color: #34495e;
+  --light-color: #ecf0f1;
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--dark-color) 100%
+  );
+  --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.05);
+  --shadow-medium: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --shadow-heavy: 0 20px 40px rgba(0, 0, 0, 0.1);
+  --border-radius: 15px;
+  --transition: all 0.3s ease;
+}
+
+/* Animations personnalisées */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Styles globaux améliorés */
+body {
+  background: var(--gradient-primary);
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+}
+
+.main-container {
+  background: white;
+  border-radius: 20px;
+  box-shadow: var(--shadow-heavy);
+  margin: 20px;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease;
+}
+
+/* Header amélioré */
+.header {
+  background: var(--gradient-secondary);
+  color: white;
+  padding: 40px 30px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 70%
+  );
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2.8rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+.header p {
+  margin: 15px 0 0 0;
+  opacity: 0.95;
+  font-size: 1.2rem;
+  font-weight: 300;
+  position: relative;
+  z-index: 1;
+}
+
+/* Cartes de modèles améliorées */
+.model-card {
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: var(--border-radius);
+  padding: 25px;
+  margin-bottom: 15px;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.model-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(52, 152, 219, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.model-card:hover::before {
+  left: 100%;
+}
+
+.model-card:hover {
+  border-color: var(--secondary-color);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-medium);
+}
+
+.model-card.selected {
+  border-color: var(--secondary-color);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Zone d'upload améliorée */
+.image-upload-area {
+  border: 3px dashed #ddd;
+  border-radius: var(--border-radius);
+  padding: 50px 20px;
+  text-align: center;
+  transition: var(--transition);
+  cursor: pointer;
+  background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.image-upload-area::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(
+    circle,
+    rgba(52, 152, 219, 0.1) 0%,
+    transparent 70%
+  );
+  transition: all 0.3s ease;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+.image-upload-area:hover::before {
+  width: 200px;
+  height: 200px;
+}
+
+.image-upload-area:hover {
+  border-color: var(--secondary-color);
+  background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
+  transform: scale(1.02);
+}
+
+.image-upload-area.dragover {
+  border-color: var(--success-color);
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  transform: scale(1.05);
+}
+
+/* Boutons améliorés */
+.analyze-btn {
+  background: linear-gradient(135deg, var(--success-color) 0%, #2ecc71 100%);
+  border: none;
+  padding: 18px 50px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  border-radius: 50px;
+  color: white;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(39, 174, 96, 0.3);
+}
+
+.analyze-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.analyze-btn:hover::before {
+  left: 100%;
+}
+
+.analyze-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(39, 174, 96, 0.4);
+}
+
+.analyze-btn:active {
+  transform: translateY(-1px);
+}
+
+.analyze-btn:disabled {
+  background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Cartes de résultats améliorées */
+.result-card {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 15px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-light);
+  border-left: 4px solid var(--secondary-color);
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.result-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    var(--secondary-color) 0%,
+    var(--success-color) 100%
+  );
+  transition: width 0.3s ease;
+}
+
+.result-card:hover {
+  transform: translateY(-5px) translateX(5px);
+  box-shadow: var(--shadow-medium);
+  border-left-color: var(--success-color);
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.result-header h6 {
+  margin: 0;
+  color: #333;
+  font-size: 14px;
+}
+
+.copy-coords {
+  padding: 3px 6px;
+  font-size: 11px;
+}
+
+.location-details {
+  margin-bottom: 8px;
+}
+
+.location-info {
+  line-height: 1.4;
+}
+
+.location-item {
+  margin-bottom: 3px;
+  padding: 2px 0;
+}
+
+.location-item strong {
+  color: #495057;
+  font-size: 13px;
+}
+
+.copyable {
+  cursor: pointer;
+  color: #007bff;
+  transition: color 0.2s ease;
+}
+
+.copyable:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.coordinates-info {
+  border-top: 1px solid #eee;
+  padding-top: 6px;
+  margin-top: 6px;
+}
+
+.coordinates-text {
+  font-family: "Courier New", monospace;
+  background: #f8f9fa;
+  padding: 2px 4px;
+  border-radius: 3px;
+  border: 1px solid #dee2e6;
+  font-size: 12px;
+}
+
+.coordinates-text:hover {
+  background: #e9ecef;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.pagination-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#pageInfo {
+  font-weight: 500;
+  color: #495057;
+  min-width: 100px;
+  text-align: center;
+}
+
+/* Style pour le premier résultat (le plus précis) */
+.first-result {
+  border: 2px solid #dc3545 !important;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%) !important;
+  position: relative;
+}
+
+.first-result::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #dc3545, #ff6b6b);
+  border-radius: 10px;
+  z-index: -1;
+  opacity: 0.1;
+}
+
+.first-result:hover {
+  background: linear-gradient(135deg, #fff0f0 0%, #f8f9fa 100%) !important;
+  border-color: #c82333 !important;
+  box-shadow: 0 6px 12px rgba(220, 53, 69, 0.2) !important;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 5px;
+}
+
+/* Style pour les marqueurs personnalisés */
+.custom-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Style pour les coordonnées GPS */
+.coordinates-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 12px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.coordinates-label {
+  font-size: 13px;
+  color: #495057;
+  font-weight: 600;
+}
+
+.coordinates-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.coordinates-value .coordinates-text {
+  flex: 1;
+}
+
+.coordinates-value .btn-copy-coords,
+.coordinates-value .btn-street-view {
+  flex-shrink: 0;
+}
+
+.coordinates-value:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.coordinates-text {
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: #495057;
+  flex: 1;
+}
+
+button.btn-copy-coords,
+button.btn-street-view {
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  cursor: pointer !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  margin-left: 6px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  min-width: 60px !important;
+  height: 24px !important;
+  justify-content: center !important;
+}
+
+button.btn-copy-coords {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+}
+
+button.btn-street-view {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+  color: white !important;
+}
+
+button.btn-copy-coords:hover,
+button.btn-street-view:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+button.btn-copy-coords:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
+}
+
+button.btn-street-view:hover {
+  background: linear-gradient(135deg, #0f8a7c 0%, #32d96b 100%) !important;
+}
+
+button.btn-copy-coords:active,
+button.btn-street-view:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+button.btn-copy-coords i,
+button.btn-street-view i {
+  font-size: 11px !important;
+  opacity: 0.9 !important;
+  transition: all 0.3s ease !important;
+}
+
+button.btn-copy-coords:hover i,
+button.btn-street-view:hover i {
+  opacity: 1 !important;
+  transform: scale(1.1) !important;
+}
+
+/* Styles pour les popups de la carte */
+.popup-content {
+  text-align: center;
+  min-width: 200px;
+}
+
+.btn-street-view-popup {
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-top: 8px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-street-view-popup:hover {
+  background: #218838;
+  transform: translateY(-1px);
+}
+
+.btn-street-view-popup i {
+  font-size: 11px;
+}
+
+/* Style pour l'indicateur de chargement de localisation */
+.loading-location {
+  color: #6c757d;
+  font-style: italic;
+  padding: 10px;
+  text-align: center;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border: 1px dashed #dee2e6;
+}
+
+.loading-location i {
+  margin-right: 8px;
+  color: #007bff;
+}
+
+/* Animation pour le spinner */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.fa-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Badges et indicateurs */
+.confidence-badge {
+  background: linear-gradient(135deg, var(--success-color) 0%, #2ecc71 100%);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(39, 174, 96, 0.3);
+  animation: slideInRight 0.5s ease;
+}
+
+/* Loading amélioré */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(5px);
+}
+
+.loading-content {
+  background: white;
+  padding: 50px;
+  border-radius: 25px;
+  text-align: center;
+  max-width: 450px;
+  box-shadow: var(--shadow-heavy);
+  animation: fadeInUp 0.5s ease;
+}
+
+.spinner {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid var(--secondary-color);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 25px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Popup content */
+.popup-content {
+  min-width: 200px;
+}
+
+.popup-content h6 {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.popup-content p {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+/* Options de précision */
+.precision-options,
+.test-options {
+  background-color: #f8f9fa;
+  border-left: 4px solid var(--primary-color);
+  padding: 15px;
+  margin-left: 20px;
+  border-radius: 0 8px 8px 0;
+}
+
+.precision-options {
+  background: linear-gradient(135deg, #e8f4fd 0%, #d6eaf8 100%);
+  border-radius: 12px;
+  padding: 25px;
+  margin-top: 15px;
+  border-left: 4px solid var(--secondary-color);
+  box-shadow: var(--shadow-light);
+  animation: fadeInUp 0.5s ease;
+}
+
+/* Conteneur de carte */
+.map-container {
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-medium);
+  margin-bottom: 30px;
+  border: 3px solid #f8f9fa;
+  transition: var(--transition);
+  height: 800px;
+  position: relative;
+}
+
+/* Élément carte Leaflet */
+#map {
+  height: 800px !important;
+  width: 120%;
+  border-radius: var(--border-radius);
+  min-height: 800px !important;
+  max-height: none !important;
+}
+
+.map-container:hover {
+  border-color: var(--secondary-color);
+  transform: scale(1.01);
+}
+
+/* Popups de carte personnalisées */
+.popup-content {
+  min-width: 250px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.popup-content h6 {
+  color: var(--primary-color);
+  margin-bottom: 12px;
+  font-weight: 600;
+  border-bottom: 2px solid var(--secondary-color);
+  padding-bottom: 5px;
+}
+
+.popup-content p {
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive amélioré */
+@media (max-width: 768px) {
+  .main-container {
+    margin: 10px;
+    border-radius: 15px;
+  }
+
+  .header h1 {
+    font-size: 2.2rem;
+  }
+
+  .header p {
+    font-size: 1rem;
+  }
+
+  .analyze-btn {
+    padding: 15px 35px;
+    font-size: 1.1rem;
+  }
+
+  .result-card {
+    padding: 20px;
+  }
+
+  .map-container {
+    height: 450px;
+  }
+}
+
+@media (max-width: 576px) {
+  .control-panel {
+    padding: 20px;
+  }
+
+  .config-section {
+    padding: 20px;
+  }
+
+  .image-upload-area {
+    padding: 30px 15px;
+  }
+
+  .loading-content {
+    padding: 30px;
+    margin: 20px;
+  }
+}
+
+/* Améliorations des formulaires */
+.form-range {
+  accent-color: var(--secondary-color);
+  height: 8px;
+  border-radius: 5px;
+}
+
+.form-range::-webkit-slider-thumb {
+  background: var(--secondary-color);
+  border-radius: 50%;
+  box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+  transition: var(--transition);
+}
+
+.form-range::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.5);
+}
+
+.form-check-input:checked {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+}
+
+/* Effets de survol pour les icônes */
+.fas,
+.fab {
+  transition: var(--transition);
+}
+
+.result-card:hover .fas {
+  transform: scale(1.1);
+  color: var(--secondary-color);
+}
+
+/* Amélioration des alertes */
+.alert {
+  border-radius: 12px;
+  border: none;
+  box-shadow: var(--shadow-light);
+  animation: fadeInUp 0.5s ease;
+}
+
+.alert-info {
+  background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+  color: #0c5460;
+  border-left: 4px solid #17a2b8;
+}
+
+/* Scrollbar personnalisée */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--secondary-color);
+  border-radius: 10px;
+  transition: var(--transition);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
+
+/* Styles pour le chargement des informations */
+.location-city,
+.location-country {
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.location-city:contains("Chargement"),
+.location-country:contains("Chargement") {
+  color: var(--secondary-color);
+  font-style: italic;
+}
+
+
+
+/* Amélioration des cartes de résultats */
+.result-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.result-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(52, 152, 219, 0.1),
+    transparent
+  );
+  transition: right 0.6s ease;
+}
+
+/* Indicateur de chargement pour les éléments */
+.loading-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid var(--secondary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+/* Styles pour les popups de carte */
+.leaflet-popup-content {
+  font-family: "Segoe UI", sans-serif;
+  line-height: 1.4;
+}
+
+.popup-content h6 {
+  color: var(--primary-color);
+  margin-bottom: 12px;
+  font-weight: 600;
+  border-bottom: 2px solid var(--secondary-color);
+  padding-bottom: 5px;
+}
+
+.popup-section {
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.popup-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 15px;
+}
+
+.popup-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Optimisation des performances */
+.result-card,
+.model-card,
+.config-section {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Amélioration de l'accessibilité */
+.btn:focus {
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 2px;
+}
+
+.form-range:focus {
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 2px;
+}
+
+/* Styles pour les résultats de test */
+.test-results-section {
+  margin-top: 20px;
+}
+
+.test-results-section .card-header {
+  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+}
+
+.test-results-section .table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  border-top: none;
+}
+
+.test-results-section .h4 {
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Styles pour les états de chargement */
+.loading-state {
+  opacity: 0.7;
+  pointer-events: none;
+  position: relative;
+}
+
+.loading-state::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 1;
+}
+
+.loading-state::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid var(--secondary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 2;
+}

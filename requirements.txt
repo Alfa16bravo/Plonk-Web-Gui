@@ -1,0 +1,29 @@
+--extra-index-url https://download.pytorch.org/whl/cu124
+
+# Core web framework
+flask==2.3.3
+werkzeug==2.3.7
+jinja2==3.1.2
+markupsafe==2.1.3
+itsdangerous==2.1.2
+click==8.1.7
+blinker==1.6.3
+
+# Image processing
+Pillow==10.0.1
+numpy==1.24.3
+
+# HTTP requests
+requests==2.31.0
+certifi==2023.7.22
+charset-normalizer==3.3.0
+idna==3.4
+urllib3==2.0.7
+
+# PyTorch with CUDA 12.4 support
+torch==2.6.0+cu124
+torchvision==0.21.0+cu124
+torchaudio==2.6.0+cu124
+
+# PLONK model
+diff-plonk

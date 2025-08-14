@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PLONK - Géolocalisation d'Images Professionnelle</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <!-- Custom CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+
+    <style>
+      :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --success-color: #27ae60;
+        --warning-color: #f39c12;
+        --danger-color: #e74c3c;
+        --dark-color: #34495e;
+        --light-color: #ecf0f1;
+      }
+
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .main-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color) 0%,
+          var(--dark-color) 100%
+        );
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 2.5rem;
+        font-weight: 700;
+      }
+
+      .header p {
+        margin: 10px 0 0 0;
+        opacity: 0.9;
+        font-size: 1.1rem;
+      }
+
+      .control-panel {
+        background: var(--light-color);
+        padding: 30px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .model-card {
+        background: white;
+        border: 2px solid #e9ecef;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .model-card:hover {
+        border-color: var(--secondary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .model-card.selected {
+        border-color: var(--secondary-color);
+        background: #f8f9fa;
+      }
+
+      .config-section {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .image-upload-area {
+        border: 3px dashed #ddd;
+        border-radius: 15px;
+        padding: 40px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .image-upload-area:hover {
+        border-color: var(--secondary-color);
+        background: #f8f9fa;
+      }
+
+      .image-upload-area.dragover {
+        border-color: var(--success-color);
+        background: #d4edda;
+      }
+
+      .image-preview {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .analyze-btn {
+        background: linear-gradient(
+          135deg,
+          var(--success-color) 0%,
+          #2ecc71 100%
+        );
+        border: none;
+        padding: 15px 40px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        border-radius: 50px;
+        color: white;
+        transition: all 0.3s ease;
+      }
+
+      .analyze-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);
+      }
+
+      .analyze-btn:disabled {
+        background: #95a5a6;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .results-container {
+        padding: 30px;
+      }
+
+      .map-container {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+      }
+
+      .result-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        border-left: 5px solid var(--secondary-color);
+        transition: all 0.3s ease;
+      }
+
+      .result-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .confidence-badge {
+        background: var(--success-color);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+
+      .loading-content {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 400px;
+      }
+
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid var(--secondary-color);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .precision-options {
+        background: #e8f4fd;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 15px;
+        border-left: 4px solid var(--secondary-color);
+      }
+
+      .form-range {
+        accent-color: var(--secondary-color);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-content">
+        <div class="spinner"></div>
+        <h4 id="loadingText">Analyse en cours...</h4>
+        <p id="loadingSubtext">
+          Veuillez patienter pendant que l'IA détermine les positions possibles
+        </p>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="main-container">
+        <!-- Header -->
+        <div class="header">
+          <h1><i class="fas fa-globe-americas"></i> PLONK Professional</h1>
+          <p>Géolocalisation d'images par Intelligence Artificielle</p>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+          <div class="row">
+            <!-- Model Selection -->
+            <div class="col-lg-4">
+              <div class="config-section">
+                <h5><i class="fas fa-robot"></i> Sélection du Modèle</h5>
+                <div id="modelSelection">
+                  {% for model_id, info in models.items() %}
+                  <div class="model-card" data-model="{{ model_id }}">
+                    <div class="d-flex align-items-center mb-2">
+                      <input
+                        type="radio"
+                        name="model"
+                        value="{{ model_id }}"
+                        class="form-check-input me-3"
+                        {%
+                        if
+                        loop.first
+                        %}checked{%
+                        endif
+                        %}
+                      />
+                      <h6 class="mb-0">{{ info.name }}</h6>
+                    </div>
+                    <p class="text-muted small mb-0">{{ info.description }}</p>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
+            <!-- Configuration -->
+            <div class="col-lg-4">
+              <div class="config-section">
+                <h5><i class="fas fa-cogs"></i> Configuration</h5>
+
+                <!-- Limite des résultats -->
+                <div class="mb-3">
+                  <label for="maxResults" class="form-label"
+                    >Limite des résultats:
+                    <span id="maxResultsValue">65</span></label
+                  >
+                  <input
+                    type="range"
+                    class="form-range"
+                    id="maxResults"
+                    min="1"
+                    max="200"
+                    value="65"
+                  />
+                </div>
+
+                <!-- Mode précision -->
+                <div class="form-check mb-3">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="precisionMode"
+                  />
+                  <label class="form-check-label" for="precisionMode">
+                    <strong
+                      ><i class="fas fa-sync-alt"></i> Mode Itératif</strong
+                    >
+                    <small class="text-muted d-block"
+                      >Effectue plusieurs analyses successives pour tenter
+                      d’affiner les résultats géographiques(beta)</small
+                    >
+                  </label>
+                </div>
+
+                <!-- Options précision -->
+                <div
+                  class="precision-options"
+                  id="precisionOptions"
+                  style="display: none"
+                >
+                  <div class="mb-3">
+                    <label for="iterations" class="form-label"
+                      >Itérations: <span id="iterationsValue">3</span></label
+                    >
+                    <input
+                      type="range"
+                      class="form-range"
+                      id="iterations"
+                      min="2"
+                      max="100"
+                      value="3"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="finalResults" class="form-label"
+                      >Résultats finaux:
+                      <span id="finalResultsValue">5</span></label
+                    >
+                    <input
+                      type="range"
+                      class="form-range"
+                      id="finalResults"
+                      min="1"
+                      max="20"
+                      value="5"
+                    />
+                  </div>
+                  <small class="text-muted"
+                    >Effectue plusieurs analyses et garde les positions les plus
+                    fréquentes</small
+                  >
+                </div>
+
+                <!-- Mode Test de Prédiction -->
+                <div class="form-check mb-3">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="testMode"
+                  />
+                  <label class="form-check-label" for="testMode">
+                    <strong
+                      ><i class="fas fa-chart-line"></i> Mode Test de
+                      Prédiction</strong
+                    >
+                    <small class="text-muted d-block"
+                      >Compare les prédictions du modèle avec les vraies
+                      coordonnées GPS pour évaluer la précision</small
+                    >
+                  </label>
+                </div>
+
+                <!-- Options test de prédiction -->
+                <div
+                  class="test-options"
+                  id="testOptions"
+                  style="display: none"
+                >
+                  <div class="row mb-3">
+                    <div class="col-md-6">
+                      <label for="trueLat" class="form-label"
+                        >Latitude réelle</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="trueLat"
+                        step="0.000001"
+                        placeholder="Ex: 48.8566"
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label for="trueLon" class="form-label"
+                        >Longitude réelle</label
+                      >
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="trueLon"
+                        step="0.000001"
+                        placeholder="Ex: 2.3522"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Image Upload -->
+            <div class="col-lg-4">
+              <div class="config-section">
+                <h5><i class="fas fa-image"></i> Sélection d'Image</h5>
+                <div class="image-upload-area" id="imageUploadArea">
+                  <div id="uploadPrompt">
+                    <i
+                      class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"
+                    ></i>
+                    <p class="mb-2">
+                      Glissez votre image ici ou cliquez pour sélectionner
+                    </p>
+                    <small class="text-muted"
+                      >Formats supportés: JPG, PNG, WebP (max 16MB)</small
+                    >
+                  </div>
+                  <div id="imagePreview" style="display: none">
+                    <img id="previewImage" class="image-preview" alt="Aperçu" />
+                    <div class="mt-3">
+                      <button
+                        class="btn btn-outline-danger btn-sm"
+                        id="removeImage"
+                      >
+                        <i class="fas fa-trash"></i> Supprimer
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <input
+                  type="file"
+                  id="imageInput"
+                  accept="image/*"
+                  style="display: none"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Analyze Button -->
+          <div class="text-center mt-4">
+            <button class="btn analyze-btn" id="analyzeBtn" disabled>
+              <i class="fas fa-search-location"></i> Analyser l'Image
+            </button>
+          </div>
+        </div>
+
+        <!-- Results Section -->
+        <div
+          class="results-container"
+          id="resultsContainer"
+          style="display: none"
+        >
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="map-container">
+                <div id="map" style="height: 1000px; min-height: 1000px"></div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div id="resultsList"></div>
+              <div
+                id="paginationControls"
+                class="text-center mt-3"
+                style="display: none"
+              >
+                <button id="prevPageBtn" class="btn btn-secondary btn-sm">
+                  &laquo; Précédent
+                </button>
+                <span id="pageInfo" class="mx-2"></span>
+                <button id="nextPageBtn" class="btn btn-secondary btn-sm">
+                  Suivant &raquo;
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Application JavaScript -->
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+
+
+  </body>
+</html>
